@@ -68,38 +68,4 @@
     })
   </script>
 </body>
-</html>      responseEl.style.display = 'none'
-      errorEl.style.display = 'none'
-      responseEl.textContent = ''
-      errorEl.textContent = ''
-
-      const postLink = document.getElementById('postLink').value.trim()
-      const reactions = document.getElementById('reactions').value.trim()
-
-      try {
-        const res = await fetch('/api/react', { 
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postLink, reactions })
-        })
-
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan')
-
-        let output = `✅ Reaction Berhasil!\n\n`
-        output += `📝 Pesan: ${data.message || 'Reaksi berhasil dikirim'}\n`
-        if (data.botResponse) output += `🤖 Respon Bot: ${data.botResponse}\n`
-        output += `🔗 Post Link: ${postLink}\n`
-        output += `🎯 Reactions: ${reactions}`
-
-        responseEl.style.display = 'block'
-        responseEl.textContent = output
-
-      } catch (err) {
-        errorEl.style.display = 'block'
-        errorEl.textContent = `❌ ${err.message}`
-      }
-    })
-  </script>
-</body>
 </html>
