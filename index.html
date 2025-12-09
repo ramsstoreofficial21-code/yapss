@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React ke Channel WA</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #6a11cb; display: flex; justify-content: center; padding: 50px; }
+    .container { background: #fff; padding: 30px; border-radius: 15px; max-width: 500px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    input, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 16px; }
+    button { background: #2575fc; color: white; border: none; cursor: pointer; }
+    button:hover { background: #6a11cb; }
+    .result { background: #e0f7fa; color: #006064; padding: 15px; border-radius: 10px; white-space: pre-wrap; display: none; }
+    .error { background: #ffebee; color: #c62828; padding: 15px; border-radius: 10px; white-space: pre-wrap; display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>React ke Channel WA</h2>
+    <form id="reactForm">
+      <input type="text" id="postLink" placeholder="Masukkan link post" required>
+      <input type="text" id="reactions" placeholder="Masukkan emoji reaksi, contoh: ♥️ 🙏🏻" required>
+      <button type="submit">Kirim Reaksi</button>
+    </form>
+    <div id="response" class="result"></div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('reactForm')
+    const responseEl = document.getElementById('response')
+    const errorEl = document.getElementById('error')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      responseEl.style.display = 'none'
+      errorEl.style.display = 'none'
+      responseEl.textContent = ''
+      errorEl.textContent = ''
+
+      const postLink = document.getElementById('postLink').value.trim()
+      const reactions = document.getElementById('reactions').value.trim()
+
+      try {
+        const res = await fetch('/api/react', { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ postLink, reactions })
+        })
+
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan')
+
+        let output = `✅ Reaction Berhasil!\n\n`
+        output += `📝 Pesan: ${data.message || 'Reaksi berhasil dikirim'}\n`
+        if (data.botResponse) output += `🤖 Respon Bot: ${data.botResponse}\n`
+        output += `🔗 Post Link: ${postLink}\n`
+        output += `🎯 Reactions: ${reactions}`
+
+        responseEl.style.display = 'block'
+        responseEl.textContent = output
+
+      } catch (err) {
+        errorEl.style.display = 'block'
+        errorEl.textContent = `❌ ${err.message}`
+      }
+    })
+  </script>
+</body>
+</html>
