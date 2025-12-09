@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const headers = {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer <TOKEN-MU>'
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzgyZDFhMTE0YWI3MTE5ZmNhNTdjZiIsImlhdCI6MTc2NTI4OTI0MiwiZXhwIjoxNzY1ODk0MDQyfQ.PyblreikWf2_fcPwRfrM_w-_VZmSlvk1vQtrrOuNFBo'
     }
 
     const response = await axios.post(url, requestData, { headers })
